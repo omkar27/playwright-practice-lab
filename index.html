@@ -1,0 +1,745 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playwright Hands-on Practice Lab</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: #f3f5f9;
+            color: #222;
+        }
+
+        header {
+            background: #172554;
+            color: white;
+            padding: 22px;
+            text-align: center;
+        }
+
+        nav {
+            background: #1e40af;
+            padding: 12px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 12px;
+            text-decoration: none;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 25px auto;
+            padding: 0 15px;
+        }
+
+        section {
+            background: white;
+            margin-bottom: 22px;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 2px 7px #00000012;
+        }
+
+        h2 {
+            color: #1e40af;
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 5px;
+        }
+
+        input, select, textarea, button {
+            padding: 10px;
+            margin: 4px 0;
+            box-sizing: border-box;
+        }
+
+        input, select, textarea {
+            border: 1px solid #aaa;
+            border-radius: 5px;
+            max-width: 100%;
+        }
+
+        button {
+            border: none;
+            border-radius: 5px;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button:disabled {
+            background: #999;
+            cursor: not-allowed;
+        }
+
+        .form-control {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .card {
+            display: inline-block;
+            width: 180px;
+            padding: 15px;
+            margin: 5px;
+            background: #eff6ff;
+            border-radius: 8px;
+            vertical-align: top;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background: #dbeafe;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #172554;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Playwright Hands-on Practice Lab</h1>
+    <p>Practice automation using Python, Playwright and Pytest</p>
+</header>
+
+<nav>
+    <a href="#locators">Locators</a>
+    <a href="#forms">Forms</a>
+    <a href="#dropdowns">Dropdowns</a>
+    <a href="#tables">Tables</a>
+    <a href="#waits">Waits</a>
+</nav>
+
+<main>
+
+    <!-- 1. LOCATORS -->
+    <section id="locators">
+        <h2>1. Locators and Assertions</h2>
+
+        <p id="welcome-message">Welcome to the Playwright practice lab!</p>
+
+        <button id="click-button" onclick="showClickResult()">
+            Click Me
+        </button>
+
+        <p id="click-result" aria-live="polite"></p>
+
+        <button type="button" class="secondary-button"
+                onclick="document.getElementById('secondary-result').textContent='Secondary button clicked'">
+            Secondary Button
+        </button>
+
+        <p id="secondary-result"></p>
+
+        <p class="product-name">Laptop</p>
+        <p class="product-name">Keyboard</p>
+        <p class="product-name">Mouse</p>
+
+        <button id="double-click-button"
+                ondblclick="document.getElementById('double-click-result').textContent='Double-click successful'">
+            Double Click Me
+        </button>
+
+        <p id="double-click-result"></p>
+
+        <button id="right-click-button" oncontextmenu="
+            event.preventDefault();
+            document.getElementById('right-click-result').textContent='Right-click successful';
+        ">
+            Right Click Me
+        </button>
+
+        <p id="right-click-result"></p>
+    </section>
+
+
+    <!-- 2. TEXT INPUTS -->
+    <section id="forms">
+        <h2>2. Text Inputs and Form Submission</h2>
+
+        <form id="registration-form">
+
+            <label for="full-name">Full Name</label>
+            <input class="form-control"
+                   type="text"
+                   id="full-name"
+                   name="fullName"
+                   placeholder="Enter your name"
+                   required>
+
+            <label for="email">Email</label>
+            <input class="form-control"
+                   type="email"
+                   id="email"
+                   name="email"
+                   placeholder="Enter your email"
+                   required>
+
+            <label for="password">Password</label>
+            <input class="form-control"
+                   type="password"
+                   id="password"
+                   name="password"
+                   placeholder="Enter password"
+                   required>
+
+            <label for="comments">Comments</label>
+            <textarea class="form-control"
+                      id="comments"
+                      placeholder="Enter your comments"></textarea>
+
+            <br>
+
+            <button type="submit" id="submit-form">
+                Submit Form
+            </button>
+
+            <button type="reset" id="reset-form">
+                Reset Form
+            </button>
+        </form>
+
+        <p id="form-result" role="status" aria-live="polite"></p>
+    </section>
+
+
+    <!-- 3. CHECKBOXES AND RADIO BUTTONS -->
+    <section id="checkboxes">
+        <h2>3. Checkboxes and Radio Buttons</h2>
+
+        <p>Select your skills:</p>
+
+        <label>
+            <input type="checkbox" id="python" name="skills" value="Python">
+            Python
+        </label>
+
+        <label>
+            <input type="checkbox" id="playwright" name="skills" value="Playwright">
+            Playwright
+        </label>
+
+        <label>
+            <input type="checkbox" id="pytest" name="skills" value="Pytest">
+            Pytest
+        </label>
+
+        <p>Experience Level:</p>
+
+        <label>
+            <input type="radio" name="experience" value="Beginner">
+            Beginner
+        </label>
+
+        <label>
+            <input type="radio" name="experience" value="Intermediate">
+            Intermediate
+        </label>
+
+        <label>
+            <input type="radio" name="experience" value="Advanced">
+            Advanced
+        </label>
+
+        <button id="show-selection" onclick="showSelections()">
+            Show Selections
+        </button>
+
+        <p id="selection-result" aria-live="polite"></p>
+    </section>
+
+
+    <!-- 4. DROPDOWNS -->
+    <section id="dropdowns">
+        <h2>4. Dropdowns</h2>
+
+        <label for="country">Select Country</label>
+
+        <select id="country" name="country">
+            <option value="">-- Select Country --</option>
+            <option value="india">India</option>
+            <option value="usa">United States</option>
+            <option value="uk">United Kingdom</option>
+            <option value="canada">Canada</option>
+        </select>
+
+        <label for="multiple-skills">Select Multiple Skills</label>
+
+        <select id="multiple-skills" multiple size="4">
+            <option value="python">Python</option>
+            <option value="java">Java</option>
+            <option value="javascript">JavaScript</option>
+            <option value="typescript">TypeScript</option>
+        </select>
+
+        <p id="dropdown-result" aria-live="polite"></p>
+
+        <button id="show-country" onclick="
+            document.getElementById('dropdown-result').textContent =
+            'Country: ' +
+            document.getElementById('country').selectedOptions[0].text;
+        ">
+            Show Country
+        </button>
+    </section>
+
+
+    <!-- 5. TABLE -->
+    <section id="tables">
+        <h2>5. Web Tables and Filtering</h2>
+
+        <label for="search-employee">Search Employee</label>
+
+        <input id="search-employee"
+               placeholder="Search by employee name"
+               oninput="filterEmployees()">
+
+        <table id="employee-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Role</th>
+                    <th>Department</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>101</td>
+                    <td>Amit</td>
+                    <td>SDET</td>
+                    <td>QA</td>
+                    <td>
+                        <button onclick="showEmployee(this)">View</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>102</td>
+                    <td>Priya</td>
+                    <td>Developer</td>
+                    <td>Engineering</td>
+                    <td>
+                        <button onclick="showEmployee(this)">View</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>103</td>
+                    <td>Rahul</td>
+                    <td>Automation Engineer</td>
+                    <td>QA</td>
+                    <td>
+                        <button onclick="showEmployee(this)">View</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>104</td>
+                    <td>Sneha</td>
+                    <td>DevOps Engineer</td>
+                    <td>Infrastructure</td>
+                    <td>
+                        <button onclick="showEmployee(this)">View</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p id="employee-result" aria-live="polite"></p>
+    </section>
+
+
+    <!-- 6. AUTO WAITING -->
+    <section id="waits">
+        <h2>6. Auto-Waiting and Dynamic Elements</h2>
+
+        <button id="load-data" onclick="loadData()">
+            Load Data After 2 Seconds
+        </button>
+
+        <p id="loading-status" aria-live="polite"></p>
+
+        <div id="dynamic-data" class="hidden">
+            <p id="loaded-message">Dynamic data loaded successfully!</p>
+            <p id="loaded-value">Total records: 25</p>
+        </div>
+
+        <hr>
+
+        <button id="enable-button" onclick="enableSubmit()">
+            Enable Submit Button After 3 Seconds
+        </button>
+
+        <button id="delayed-submit" disabled
+                onclick="document.getElementById('delayed-result').textContent='Submitted successfully'">
+            Submit
+        </button>
+
+        <p id="delayed-result" aria-live="polite"></p>
+    </section>
+
+
+    <!-- 7. ALERTS -->
+    <section id="alerts">
+        <h2>7. JavaScript Dialogs</h2>
+
+        <button id="alert-button" onclick="alert('This is a test alert')">
+            Trigger Alert
+        </button>
+
+        <button id="confirm-button" onclick="
+            const answer = confirm('Do you want to continue?');
+            document.getElementById('confirm-result').textContent =
+            answer ? 'Confirmed' : 'Cancelled';
+        ">
+            Trigger Confirm
+        </button>
+
+        <p id="confirm-result" aria-live="polite"></p>
+
+        <button id="prompt-button" onclick="
+            const answer = prompt('Enter your city');
+            document.getElementById('prompt-result').textContent =
+            answer === null ? 'Prompt dismissed' : 'City: ' + answer;
+        ">
+            Trigger Prompt
+        </button>
+
+        <p id="prompt-result" aria-live="polite"></p>
+    </section>
+
+
+    <!-- 8. HIDDEN AND VISIBLE -->
+    <section id="visibility">
+        <h2>8. Visibility and Enabled State</h2>
+
+        <button id="toggle-visibility" onclick="
+            document.getElementById('hidden-message').classList.toggle('hidden');
+        ">
+            Toggle Hidden Element
+        </button>
+
+        <p id="hidden-message" class="hidden">
+            This message can be hidden or visible.
+        </p>
+
+        <button id="disabled-button" disabled>
+            Disabled Button
+        </button>
+
+        <p id="visibility-result"></p>
+    </section>
+
+
+    <!-- 9. HOVER -->
+    <section id="hover">
+        <h2>9. Mouse Hover</h2>
+
+        <div class="card"
+             id="hover-card"
+             onmouseenter="
+                 document.getElementById('hover-message').classList.remove('hidden');
+             "
+             onmouseleave="
+                 document.getElementById('hover-message').classList.add('hidden');
+             ">
+
+            <h3>Hover Over Me</h3>
+
+            <p>Move your mouse over this card.</p>
+
+            <p id="hover-message" class="hidden">
+                Hover action successful!
+            </p>
+        </div>
+    </section>
+
+
+    <!-- 10. FILE UPLOAD -->
+    <section id="upload">
+        <h2>10. File Upload</h2>
+
+        <label for="file-upload">Choose a file</label>
+
+        <input type="file" id="file-upload">
+
+        <p id="file-result" aria-live="polite"></p>
+
+        <button id="show-file" onclick="
+            const input = document.getElementById('file-upload');
+            document.getElementById('file-result').textContent =
+            input.files.length
+                ? 'Selected file: ' + input.files[0].name
+                : 'No file selected';
+        ">
+            Show Selected File
+        </button>
+    </section>
+
+
+    <!-- 11. KEYBOARD -->
+    <section id="keyboard">
+        <h2>11. Keyboard Actions</h2>
+
+        <label for="keyboard-input">Type text and press Enter</label>
+
+        <input id="keyboard-input"
+               placeholder="Enter a task"
+               onkeydown="
+                   if (event.key === 'Enter') {
+                       document.getElementById('keyboard-result').textContent =
+                       'Task added: ' + this.value;
+                   }
+               ">
+
+        <p id="keyboard-result" aria-live="polite"></p>
+    </section>
+
+
+    <!-- 12. IFRAME -->
+    <section id="frames">
+        <h2>12. Iframe Practice</h2>
+
+        <iframe
+            id="practice-frame"
+            title="Practice iframe"
+            srcdoc="
+                <!DOCTYPE html>
+                <html>
+                <body>
+                    <h3>Inside Iframe</h3>
+                    <label for='frame-input'>Frame Input</label>
+                    <input id='frame-input' placeholder='Type inside frame'>
+                    <button id='frame-button'
+                        onclick=&quot;document.getElementById('frame-result').textContent='Iframe button clicked'&quot;>
+                        Click Frame Button
+                    </button>
+                    <p id='frame-result'></p>
+                </body>
+                </html>
+            "
+            width="100%"
+            height="180">
+        </iframe>
+    </section>
+
+
+    <!-- 13. NEW TAB -->
+    <section id="new-tab">
+        <h2>13. New Tab and Popup Practice</h2>
+
+        <button id="open-popup" onclick="
+            const popup = window.open('', 'practicePopup', 'width=400,height=300');
+            if (popup) {
+                popup.document.write(
+                    '<!DOCTYPE html><html><head><title>Practice Popup</title></head>' +
+                    '<body><h2 id=&quot;popup-heading&quot;>Popup Window</h2>' +
+                    '<p id=&quot;popup-message&quot;>Welcome to the new tab!</p></body></html>'
+                );
+                popup.document.close();
+            }
+        ">
+            Open Popup
+        </button>
+    </section>
+
+
+    <!-- 14. SEARCH -->
+    <section id="search">
+        <h2>14. Search and Results</h2>
+
+        <label for="search-box">Search Product</label>
+
+        <input id="search-box" placeholder="Search products">
+
+        <button id="search-button" onclick="
+            const query = document.getElementById('search-box').value.trim();
+            document.getElementById('search-result').textContent =
+                query ? 'Results found for: ' + query : 'Please enter a search term';
+        ">
+            Search
+        </button>
+
+        <p id="search-result" aria-live="polite"></p>
+    </section>
+
+
+    <!-- 15. DYNAMIC LIST -->
+    <section id="dynamic-list">
+        <h2>15. Dynamic Elements and Lists</h2>
+
+        <button id="add-item" onclick="
+            const list = document.getElementById('task-list');
+            const item = document.createElement('li');
+            item.textContent = 'Task ' + (list.children.length + 1);
+            list.appendChild(item);
+        ">
+            Add Task
+        </button>
+
+        <ul id="task-list">
+            <li>Task 1</li>
+            <li>Task 2</li>
+        </ul>
+    </section>
+
+
+    <!-- 16. SCROLLING -->
+    <section id="scroll">
+        <h2>16. Scrolling</h2>
+
+        <p>Practice scrolling to this section with Playwright.</p>
+
+        <button id="scroll-button" onclick="
+            document.getElementById('scroll-result').textContent =
+            'Scroll target reached';
+        ">
+            Click After Scrolling
+        </button>
+
+        <p id="scroll-result"></p>
+    </section>
+
+</main>
+
+<footer>
+    <p>Playwright Python Practice Lab | Locators • Actions • Assertions • Waits</p>
+</footer>
+
+
+<script>
+    function showClickResult() {
+        document.getElementById('click-result').textContent =
+            'Button clicked successfully!';
+    }
+
+    document.getElementById('registration-form').addEventListener(
+        'submit',
+        function(event) {
+            event.preventDefault();
+
+            document.getElementById('form-result').textContent =
+                'Registration successful for ' +
+                document.getElementById('full-name').value;
+
+            document.getElementById('form-result').className = 'success';
+        }
+    );
+
+    function showSelections() {
+        const skills = Array.from(
+            document.querySelectorAll('input[name="skills"]:checked')
+        ).map(item => item.value);
+
+        const experience = document.querySelector(
+            'input[name="experience"]:checked'
+        );
+
+        document.getElementById('selection-result').textContent =
+            'Skills: ' + (skills.join(', ') || 'None selected') +
+            ' | Experience: ' +
+            (experience ? experience.value : 'None selected');
+    }
+
+    function filterEmployees() {
+        const query = document.getElementById('search-employee')
+            .value.toLowerCase();
+
+        const rows = document.querySelectorAll('#employee-table tbody tr');
+
+        rows.forEach(row => {
+            row.style.display = row.textContent.toLowerCase().includes(query)
+                ? ''
+                : 'none';
+        });
+    }
+
+    function showEmployee(button) {
+        const row = button.closest('tr');
+        const cells = row.querySelectorAll('td');
+
+        document.getElementById('employee-result').textContent =
+            'Employee: ' + cells[1].textContent +
+            ' | Role: ' + cells[2].textContent +
+            ' | Department: ' + cells[3].textContent;
+    }
+
+    function loadData() {
+        const status = document.getElementById('loading-status');
+        const data = document.getElementById('dynamic-data');
+
+        data.classList.add('hidden');
+        status.textContent = 'Loading...';
+
+        setTimeout(() => {
+            data.classList.remove('hidden');
+            status.textContent = 'Data loaded!';
+        }, 2000);
+    }
+
+    function enableSubmit() {
+        const button = document.getElementById('delayed-submit');
+
+        button.disabled = true;
+
+        setTimeout(() => {
+            button.disabled = false;
+        }, 3000);
+    }
+</script>
+
+</body>
+</html>
